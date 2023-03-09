@@ -127,8 +127,8 @@
     </thead>
 
     {% for worker in tb_workers %}
-      <tr class="table-primary"> 
-      
+      <tr class="table-primary" id="tb_worker_{{worker.id}}"> 
+        {% csrf_token %}
           <td>{{ worker.fio }}</td>
           <td>{{ worker.gen }}</td>
           <td>{{ worker.age }}</td>
@@ -140,7 +140,7 @@
             Изменить</button>
           </td>
           <td>
-            <button type="button" name="btn-del" id="del_{{worker.id}}" class="btn btn-danger">
+            <button type="button" name="btn-del" id="del_{{worker.id}}" onclick="del_row({{worker.id}}, 'tb_worker_', 'del_worker')" class="btn btn-danger">
             Удалить</button>
           </td> 
         </span>    
@@ -163,9 +163,9 @@
     </thead>
 
     {% for vacancy in tb_vacancy %}
-      <tr class="table-primary"> 
-      
-          <td>{{ vacancy.id }}</td>
+      <tr class="table-primary" id="tb_vac_{{vacancy.id}}"> 
+        {% csrf_token %}
+          <td id='{{ vacancy.id }}'>{{ vacancy.id }}</td>
           <td>{{ vacancy.name_vacancy }}</td>
           <td>{{ vacancy.category_vacancy }}</td>
           <td>
@@ -173,7 +173,7 @@
             Изменить</button>
           </td>
           <td>
-            <button type="button" name="btn-del" id="del_{{vacancy.id}}" class="btn btn-danger">
+            <button type="button" name="btn-del" id="del_{{vacancy.id}}" onclick="del_row({{vacancy.id}}, 'tb_vac_', 'del_vac')" class="btn btn-danger" >
             Удалить</button>
           </td> 
         </span>    
@@ -207,7 +207,7 @@
             Изменить</button>
           </td>
           <td>
-            <button type="button" name="btn-del" id="del_{{category.id}}" class="btn btn-danger" onclick="del_cat({{category.id}})">
+            <button type="button" name="btn-del" id="del_{{category.id}}" onclick="del_row({{category.id}}, 'tb_cat_', 'del_cat')" class="btn btn-danger">
             Удалить</button>
           </td> 
         </span>    

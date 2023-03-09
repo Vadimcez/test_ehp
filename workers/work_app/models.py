@@ -94,6 +94,15 @@ class Vacancy(models.Model):
         data = json.loads(data_json)
         return data
     
+    def delete(self, id):
+        try:
+            with connection.cursor() as cursor:
+                sql_del_vac = "DELETE FROM vacancy WHERE id = %s" % id
+                cursor.execute(sql_del_vac)
+                print(sql_del_vac)
+        except Exception as e: 
+            print(e)
+        
     
     def __str__(self):
         return self.name_vacancy
@@ -125,7 +134,7 @@ class Worker(models.Model):
         with connection.cursor() as cursor:
             sql_1 = ("SELECT worker.id, CONCAT(last_name,' ',first_name,' ',middle_name) AS ФИО, CAST(EXTRACT(year from AGE(date_birth))AS INT) AS Возраст, gender AS Пол, \
             name_vacancy AS Должность, name_category AS Категория FROM public.worker INNER JOIN vacancy ON worker.vacancy_id = vacancy.id INNER JOiN category ON \
-            vacancy.id = category.id;")      
+             vacancy.category_vacancy_id = category.id ORDER BY worker.id DESC;")      
             cursor.execute(sql_1)
             rows = cursor.fetchall()
         keys = ("id","fio","age","gen", "vac", "cat")
@@ -134,6 +143,15 @@ class Worker(models.Model):
         table_data = json.loads(data_json)
         #print(table_data)
         return table_data
+    
+    def delete(self,id):
+        try:
+            with connection.cursor() as cursor:
+                sql_del_worker = "DELETE FROM worker WHERE id = %s" % id
+                cursor.execute(sql_del_worker)
+                print(sql_del_worker)
+        except Exception as e: 
+            print(e)
     
     def __str__(self):
         return f"{self.first_name} {self.last_name}"

@@ -83,23 +83,25 @@ async function send_json_to_server(form_name) {
       catch (error) {
         console.error('Ошибка:', error);
       }
-    
-    
+      
     }
 
-async function del_cat(id_cat) {
-  const row = document.getElementById('tb_cat_'+id_cat);
-  let total = row.getElementsByTagName('td')[2].innerHTML
+async function del_row(id, tb_name, type_data) {
+  const row = document.getElementById(tb_name+id);
 
-  if ( total > 0 ) { alert('Нелзя удалять категорию с должносятми') } else {
+  if ( tb_name === 'tb_cat_' ) { 
+    let total = row.getElementsByTagName('td')[2].innerHTML 
+    if ( total > 0 ) { alert('Нелзя удалять категорию с должносятми')
+    return; }
+  }
     row.style.display = 'none';
     let csrf  = row.getElementsByTagName('input').item(0).value;
 
     let data = {
-      type: 'del_cat',
-      id: id_cat,
+      type: type_data,
+      id: id,
     };
-
+    console.log(data);
     const jsonData = JSON.stringify(data);
       
       const url = 'http://127.0.0.1:8000/home/';
@@ -119,5 +121,4 @@ async function del_cat(id_cat) {
         console.error('Ошибка:', error);
       }
   
-  }
 }

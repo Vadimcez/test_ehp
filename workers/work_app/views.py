@@ -85,7 +85,7 @@ class Home(TemplateView):
     def post(self, request):
         if request.method == 'POST':
             dry = json.loads(request.body)
-            print(dry)
+            #print(dry)
             if dry.get('name_category') != None:
                 cat_name = dry.get('name_category')
                 if check_is_unique('category', 'name_category', cat_name):
@@ -118,10 +118,17 @@ class Home(TemplateView):
                     error_add_worker = 'Сотрудник с таким ФИО, датой рождения, вакансией уже существует'
                     print(error_add_worker)
                     return JsonResponse(json.dumps('Worker exist'), safe=False)
-            elif dry.get('type','del_cat') != None:
-                print('del_cat')
-                id_cat = dry.get('id')
-                Category.delete(Category,id_cat)
+            elif dry.get('type') is not None:
+                type = dry.get('type')
+                if type == 'del_cat':
+                    id_cat = dry.get('id')
+                    Category.delete(Category,id_cat)
+                elif type =='del_vac':
+                    id_vac = dry.get('id')
+                    Vacancy.delete(Vacancy,id_vac)
+                elif type == 'del_worker':
+                    id_worker = dry.get('id')
+                    Worker.delete(Worker, id_worker)
             else:
                 print('error')
                 print(dry)
