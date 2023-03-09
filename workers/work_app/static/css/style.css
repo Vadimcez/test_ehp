@@ -8,20 +8,18 @@ p { color: aliceblue; }
 
 label { font-weight: 600; font-size: 18px }
 
-.add_cat, .add_vac, .add_worker {
+.add_cat, .add_vac, .add_worker, .add_human {
     display: none;
     width: 30%;
 
 }
 
-
-
 table { font-size: 16px; font-weight: 500; }
 th { color: white; font-weight: 800; font-size: 18px}
-
 
 .close_btn { position: absolute; left: 31%; 
     background-color: white; color: black;}
 
 #table_vacancy { display: none; }
 #table_category { display: none; }
+#table_human { display: none; }

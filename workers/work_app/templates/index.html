@@ -14,63 +14,8 @@
 
 <body>
 {% block content %}
-<div>
-<form action="{% url 'index' %}" method="post">
-  <div class="mb-3">
-  {% csrf_token %}
-   {{form_cat.as_p}}
-   <button type="submit" name="button-cat" access="false" style="success" id="button-cat">Добавить</button>
-  </div>
-</form>
-</div>
-
-<div class='form-group'>  
- <form action="{% url 'index' %}" method="post">
-  {% csrf_token %}
- {{form_vac.as_p}}
- <button type="submit" name="button-vac" access="false" style="success" id="button-vac">Добавить</button>
- </form>
-<br>
-</div>
- <form action="{% url 'index' %}" method="post">
-  {% csrf_token %}
- {{form_worker.as_p}}
- <button type="submit" name="button-work" access="false" style="success" id="button-work">Добавить</button>
- </form>
-<br>
- <table class="table table-striped">
-  <thead class="thead-primary">
-  <tr>
-      <th>ФИО</th>
-      <th>Пол</th>
-      <th>Возраст</th>
-      <th>Должность</th>
-      <th>Категория</th>
-      <th>Изменить</th>
-      <th>Удалить</th>
-  </tr>
-</thead>
-  {% for  id, fio, gen, age, vac, cat in query_results %}
-  <tr class="table-primary"> 
-   
-      <td> <span>{{ fio }} </span></td>
-      <td>{{ age }}</td>
-      <td>{{ gen }}</td>
-      <td>{{ vac }}</td>
-      <td>{{ cat }}</td>
-
-      <td>
-        <button type="button" name="btn-edit" id="edit_{{id}}" onclick=save(this) class="btn btn-success">
-        Изменить</button>
-      </td>
-      <td>
-        <button type="button" name="btn-del" id="del_{{id}}" class="btn btn-danger">
-        Удалить</button>
-      </td> 
-    </span>    
-  </tr>
-  {% endfor %}
-</table>
+ 
+<a href="{% url 'home' %}">home</a>
 
  {% endblock %}
 </body>

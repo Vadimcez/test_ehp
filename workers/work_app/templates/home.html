@@ -24,6 +24,11 @@
     Добавть сотрудника
   </label>
 
+  <label for="f_human" class="btn btn-secondary">
+    <input type="radio" name="form_view" value="f_human" id="f_human" onchange="form_display('form_human')">   
+    Добавить физ. лицо
+  </label>
+
   <label for="f_vacancy" class="btn btn-secondary">
     <input type="radio" name="form_view" value="f_vacancy" id="f_vacancy" onchange="form_display('form_vac')">
     Добавить должность
@@ -52,6 +57,26 @@
     </form>
   </div>
 
+  <div class="add_human" id='add_human'>
+    
+    <form  id='form_human' action="javascript:send_json_to_server('form_human')"  method="post">
+      <button class="close_btn" type="button" onclick="close_form('add_human')">X</button>
+      <div class="mb-3">
+      {% csrf_token %}
+      <p><label for="id_vacancy">Должность:</label></p>
+      <select name='id_vacancy' class="form-select">
+        {% for vac in all_vacancy %}
+          <option value='{{ vac.id }}'>{{ vac.name_vacancy }}</option>
+        {% endfor%}
+      </select> 
+      {% for human in form_human %}
+        <p>{{ human.label_tag }}</p>
+        <p>{{ human }} </p>
+      {% endfor%}
+      <button type="submit" class="btn btn-primary" name="button-human" access="false" style="success" id="button-human">Добавить Физ. лицо</button>
+      </div>
+    </form>
+  </div>
   
   <div class="add_vac" id='add_vac'>
     <form action="javascript:send_json_to_server('form_vac')" method="post" id="form_vac" name="form_vac">
@@ -77,27 +102,41 @@
     <form action="javascript:send_json_to_server('form_worker')" method="post" id="form_worker" name="form_worker">
       <button class="close_btn" type="button" onclick="close_form('add_worker')">X</button>
       <div class="mb-3">
-      {% csrf_token %}
-      <p><label for="id_vacancy">Должность:</label></p>
-      <select name='id_vacancy' class="form-select">
-        {% for vac in all_vacancy %}
-          <option value='{{ vac.id }}'>{{ vac.name_vacancy }}</option>
-        {% endfor%}
-      </select> 
-      <p>
-      {{form_work.as_p}}
 
-      <button type="submit" class="btn btn-primary" name="button-cat" access="false" style="success" id="button-cat">Добавить сотрудника</button>
+        {% csrf_token %}
+        <p><label for="id_vacancy">Должность:</label></p>
+        <select name='id_vacancy' class="form-select">
+          {% for vac in tb_vacancy %} 
+          <option value='{{ vac.id }}' >{{ vac.name_vacancy }}</option>
+          {% endfor%}
+        </select>
+
+        <p><label for="id_human">Физ. лицо</label></p>
+        <select name='id_human' class="form-select">
+          {% for human in tb_human %} 
+          <option value='{{ human.id }}' >{{ human.fio }}</option>
+          {% endfor%}
+        </select>
+
+
+        <button type="submit" class="btn btn-primary" name="button-cat" access="false" style="success" id="button-cat">Добавить сотрудника</button>
       </div>
     </form>
   </div>
 
 <br>
 
+
   <div class="btn-group btn-group-toggle" data-toggle="buttons">
-    <label for="r_workers" class="btn btn-secondary active">
-      <input type="radio" name="tb_view" value="r_workers" id="r_workers" onchange="tb_display('r_workers')" checked>
+
+    <label for="r_worker" class="btn btn-secondary">
+      <input type="radio" name="tb_view" value="r_worker" id="r_worker" onchange="tb_display('r_worker')" checked>   
       Сотрудники
+    </label>
+
+    <label for="r_human" class="btn btn-secondary active">
+      <input type="radio" name="tb_view" value="r_human" id="r_human" onchange="tb_display('r_human')">
+      Физ. лица
     </label>
 
     <label for="r_vacancy" class="btn btn-secondary">
@@ -109,42 +148,76 @@
       <input type="radio" name="tb_view" value="r_category" id="r_category" onchange="tb_display('r_category')">   
       Категории
     </label>
+
   </div>
 
-
-  <div class="tb_workers">
-    <table class="table" id="table_workers">
+  <div class="table_human">
+    <table class="table" id="table_human">
       <thead>
       <tr>
           <th class="header" scope="col">ФИО</th>
           <th class="header" scope="col">Пол</th>
-          <th class="header" scope="col">Возраст</th>
-          <th class="header" scope="col">Должность</th>
-          <th class="header" scope="col">Категория</th>
+          <th class="header" scope="col">Дата рождения</th>
           <th class="header" scope="col">Изменить</th>
           <th class="header" scope="col">Удалить</th>
       </tr>
     </thead>
 
-    {% for worker in tb_workers %}
-      <tr class="table-primary" id="tb_worker_{{worker.id}}"> 
+    {% for human in tb_human %}
+      <tr class="table-primary" id="tb_human_{{human.id}}"> 
         {% csrf_token %}
-          <td>{{ worker.fio }}</td>
-          <td>{{ worker.gen }}</td>
-          <td>{{ worker.age }}</td>
-          <td>{{ worker.vac }}</td>
-          <td>{{ worker.cat }}</td>
+          <td>{{ human.fio }}</td>
+          <td>{{ human.gen }}</td>
+          <td>{{ human.age }}</td>
 
           <td>
-            <button type="button" name="btn-edit" id="edit_{{worker.id}}" onclick=save(this) class="btn btn-success">
+            <button type="button" name="btn-edit" id="edit_{{human.id}}" onclick=save(this) class="btn btn-success">
             Изменить</button>
           </td>
           <td>
-            <button type="button" name="btn-del" id="del_{{worker.id}}" onclick="del_row({{worker.id}}, 'tb_worker_', 'del_worker')" class="btn btn-danger">
+            <button type="button" name="btn-del" id="del_{{human.id}}" onclick="del_row({{human.id}}, 'tb_human_', 'del_human')" class="btn btn-danger">
             Удалить</button>
           </td> 
         </span>    
       </tr>
+      {% endfor %}
+
+    </table>
+  </div>
+
+  <div class="table_worker">
+    <table class="table table-striped" id="table_worker" >
+      <thead >
+      <tr>
+          <th>Номер</th>
+          <th>ФИО</th>
+          <th>Пол</th>
+          <th>Возраст</th>
+          <th>Должность</th>
+          <th>Категория</th>
+      </tr>
+    </thead>
+
+    {% for workers in tb_workers %}
+      <tr class="table-primary" id="tb_workers_{{workers.id}}"> 
+        {% csrf_token %}
+          <td id='{{ workers.id }}'>{{ workers.id }}</td>
+          <td>{{ workers.fio }}</td>
+          <td>{{ workers.age }}</td>
+          <td>{{ workers.gen }}</td>
+          <td>{{ workers.vac }}</td>
+          <td>{{ workers.cat }}</td>
+          <td>
+            <button type="button" name="btn-edit" id="edit_{{workers.id}}" onclick=save(this) class="btn btn-success">
+            Изменить</button>
+          </td>
+          <td>
+            <button type="button" name="btn-del" id="del_{{workers.id}}" onclick="del_row({{workers.id}}, 'tb_workers_', 'del_worker')" class="btn btn-danger" >
+            Удалить</button>
+          </td> 
+        </span>    
+      </tr>
+
       {% endfor %}
 
     </table>
@@ -169,7 +242,7 @@
           <td>{{ vacancy.name_vacancy }}</td>
           <td>{{ vacancy.category_vacancy }}</td>
           <td>
-            <button type="button" name="btn-edit" id="edit_{{vacancy.id}}" onclick=save(this) class="btn btn-success">
+            <button type="button" name="btn-edit" id="edit_{{vacancy.id}}" onclick=save("tb_vac_"+{{vacancy.id}},{{vacancy.id}}) class="btn btn-success">
             Изменить</button>
           </td>
           <td>
@@ -200,10 +273,10 @@
       <tr class="table-primary" id="tb_cat_{{category.id}}"> 
           {% csrf_token %}
           <td id='{{ category.id }}'>{{ category.id }}</td>
-          <td>{{ category.name_category }}</td>
+          <td><span onclick=handle(this)>{{ category.name_category }}</span></td>
           <td>{{ category.total_vacancy }}</td>
           <td>
-            <button type="button" name="btn-edit" id="edit_{{category.id}}" onclick=save(this) class="btn btn-success">
+            <button type="button" name="btn-edit" id="edit_{{category.id}}" onclick=save("tb_cat_"+{{category.id}},{{category.id}}) class="btn btn-success">
             Изменить</button>
           </td>
           <td>

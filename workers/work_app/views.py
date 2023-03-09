@@ -1,9 +1,8 @@
 from django.shortcuts import render, HttpResponse
-from .forms import AddCategory, AddVacancy, AddWorker
-from .services import check_is_unique, check_is_unique_worker
-from .models import Category, Worker, Vacancy
+from .forms import AddCategory, AddWorker, AddHuman
+from .services import check_is_unique, check_is_unique_human, check_is_unique_worker
+from .models import Category, Worker, Vacancy, Human
 from django.views.generic import TemplateView
-from django.db import connection
 import json
 from django.http import JsonResponse
 
@@ -11,60 +10,8 @@ from django.http import JsonResponse
 # Create your views here.
 
 def index(request):
-    form_cat = AddCategory(request.POST)
-    if request.method == 'POST' and 'button-cat' in request.POST:
 
-        if form_cat.is_valid():
-            name = form_cat.cleaned_data['name_category']          
-            if check_is_unique('category', 'name_category', name):
-                Category.add(Category, name)
-            else:
-                print('Данная категория уже существует')
-                return HttpResponse('Данная категория уже существует')
-    else:
-        form_cat = AddCategory()
-            
-    form_vac = AddVacancy(request.POST) 
-    if request.method == 'POST' and 'button-vac' in request.POST:
-        if form_vac.is_valid():
-            vac_name = form_vac.cleaned_data['name_add_vacancy']
-            id_category = form_vac.cleaned_data['id_category']
-            if check_is_unique('vacancy', 'name_vacancy', vac_name):
-                Vacancy.add(Vacancy, vac_name, id_category)
-            else:
-                print('Данная вакансия уже существует')
-                return HttpResponse('Данная вакансия уже существует')
-    else:
-        form_vac = AddVacancy()
-    
-    form_worker = AddWorker(request.POST)
-    if request.method == 'POST' and 'button-work' in request.POST:
-        if form_worker.is_valid():
-            last_name = form_worker.cleaned_data['last_name']
-            first_name = form_worker.cleaned_data['first_name']
-            middle_name = form_worker.cleaned_data['middle_name']
-            date_birth = form_worker.cleaned_data['date_birth']
-            gen = form_worker.cleaned_data['gender']
-            vacancy_id = form_worker.cleaned_data['vac']
-            if check_is_unique_worker(last_name, first_name, middle_name, date_birth, vacancy_id, gen):
-                Worker.add(Worker, last_name, first_name, middle_name, date_birth, vacancy_id, gen)
-            else:
-                error_add_worker = 'Сотрудник с таким ФИО, датой рождения, вакансией уже существует'
-                print(error_add_worker)
-                return HttpResponse(error_add_worker)
-                
-    else:
-        form_worker = AddWorker()      
-    
-    sql_1 = ("SELECT worker.id, CONCAT(last_name,' ',first_name,' ',middle_name) AS ФИО, CAST(EXTRACT(year from AGE(date_birth)) AS INT) AS Возраст, gender AS Пол, \
-name_vacancy AS Должность, name_category AS Категория FROM public.worker INNER JOIN vacancy ON worker.vacancy_id = vacancy.id INNER JOiN category ON \
-vacancy.id = category.id;")
-    with connection.cursor() as cursor:
-        cursor.execute(sql_1)
-        query_results = cursor.fetchall()
-    #print ('query_results ',query_results)
-    return render(request, 'index.html', {'form_cat': form_cat, 'form_vac': form_vac, 
-        'form_worker':  form_worker, 'query_results': query_results})
+    return render(request, 'index.html',)
 
 
 class Home(TemplateView):
@@ -73,19 +20,20 @@ class Home(TemplateView):
     def get(self, request):
         form_cat = AddCategory()
         form_work = AddWorker()  
+        form_human = AddHuman()
         tb_workers = Worker.all(Worker)
+        tb_human = Human.all(Human)
         all_vacancy = Vacancy.all_json(Vacancy)
         tb_category = Category.all_json(Category)
         tb_vacancy = Vacancy.full_table(Vacancy)
         return render(request, self.template_name, 
-        {'form_cat':form_cat, 'form_work':form_work,'tb_category': tb_category,
-         'all_vacancy': all_vacancy,
-         'tb_workers':tb_workers, 'tb_vacancy': tb_vacancy})
+        {'form_cat':form_cat, 'form_work':form_work, 'form_human':form_human,'all_vacancy': all_vacancy, 
+         'tb_category': tb_category,'tb_workers':tb_workers, 'tb_vacancy': tb_vacancy, 'tb_human': tb_human })
     
     def post(self, request):
         if request.method == 'POST':
             dry = json.loads(request.body)
-            #print(dry)
+            print(dry)
             if dry.get('name_category') != None:
                 cat_name = dry.get('name_category')
                 if check_is_unique('category', 'name_category', cat_name):
@@ -107,17 +55,25 @@ class Home(TemplateView):
                 middle_name = dry.get('middle_name')
                 date_birth = dry.get('date_birth')
                 gen = dry.get('gender')
-                vacancy_id = dry.get('vac')
-                tb_workers_upd = Worker.all(Worker)
-                tb_upd = json.dumps(tb_workers_upd, ensure_ascii=False)
-                if check_is_unique_worker(last_name, first_name, middle_name, date_birth, vacancy_id, gen):
-                    Worker.add(Worker, last_name, first_name, middle_name, date_birth, vacancy_id, gen)
-                    tb_workers_upd = Worker.all(Worker)
+                tb_human_upd = Human.all(Worker)
+                tb_upd = json.dumps(tb_human_upd, ensure_ascii=False)
+                if check_is_unique_human(last_name, first_name, middle_name,gen,date_birth):
+                    Human.add(Human, last_name, first_name, middle_name, gen, date_birth, )
+                    tb_human_upd = Human.all(Worker)
                     return JsonResponse({'tb_upd':tb_upd}, json_dumps_params={'ensure_ascii': False}, safe=False)
                 else:
-                    error_add_worker = 'Сотрудник с таким ФИО, датой рождения, вакансией уже существует'
+                    error_add_worker = 'Физ лицо с таким ФИО и датой рождения уже существует'
                     print(error_add_worker)
-                    return JsonResponse(json.dumps('Worker exist'), safe=False)
+                    return JsonResponse(json.dumps('Human exist'), safe=False)
+            elif dry.get('id_human') != None:
+                id_vacancy = dry.get('id_vacancy')
+                id_human = dry.get('id_human')
+                if check_is_unique_worker(id_human, id_vacancy):
+                    Worker.add(Worker, id_human, id_vacancy)
+                else:
+                    print('Данный сотрудник с такой вакансией уже существует')
+                    return JsonResponse(json.dumps('Vacansy exist'), safe=False)    
+            
             elif dry.get('type') is not None:
                 type = dry.get('type')
                 if type == 'del_cat':
@@ -126,9 +82,20 @@ class Home(TemplateView):
                 elif type =='del_vac':
                     id_vac = dry.get('id')
                     Vacancy.delete(Vacancy,id_vac)
+                elif type == 'del_human':
+                    id_worker = dry.get('id')
+                    Human.delete(Human, id_worker)
                 elif type == 'del_worker':
                     id_worker = dry.get('id')
                     Worker.delete(Worker, id_worker)
+                elif type == 'upd_cat':
+                    id_cat = dry.get('id')
+                    value = dry.get('value')
+                    if check_is_unique('category','name_category', value):
+                        Category.update(Category, id_cat, value)
+                    else:
+                        print ('Данная категория уже существует')
+                        return JsonResponse(json.dumps('fail upd cat'), safe=False)
             else:
                 print('error')
                 print(dry)
