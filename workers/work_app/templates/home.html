@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+
+  <title>Главная страница</title>
+  {% load staticfiles %} 
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet"> 
+  <script src="{% static 'js/bootstrap.min.js' %}"></script> 
+  <script src="{% static 'js/app.js' %}"></script> 
+ 
+
+</head>
+
+<body>
+{% block content %}
+
+
+
+<div class="btn-group btn-group-toggle" data-toggle="buttons" id='radio_1'>
+  <label for="f_workers" class="btn btn-secondary active">
+    <input type="radio" name="form_view" value="f_workers" id="f_workers" onchange="form_display('form_worker')">
+    Добавть сотрудника
+  </label>
+
+  <label for="f_vacancy" class="btn btn-secondary">
+    <input type="radio" name="form_view" value="f_vacancy" id="f_vacancy" onchange="form_display('form_vac')">
+    Добавить должность
+  </label>
+  
+  <label for="f_category" class="btn btn-secondary">
+    <input type="radio" name="form_view" value="f_category" id="f_category" onchange="form_display('form_cat')">   
+    Добавить категорию
+  </label>
+
+</div>
+
+
+  <div class="add_cat" id='add_cat'>
+    
+    <form action="javascript:send_json_to_server('form_category')" id='form_category' method="post">
+      <button class="close_btn" type="button" onclick="close_form('add_category')">X</button>
+      <div class="mb-3">
+      {% csrf_token %}
+      {% for tag in form_cat %}
+        <p>{{ tag.label_tag}} </p>
+        <p>{{ tag }} </p>
+      {% endfor%}
+      <button type="submit" class="btn btn-primary" name="button-cat" access="false" style="success" id="button-cat">Добавить категорию</button>
+      </div>
+    </form>
+  </div>
+
+  
+  <div class="add_vac" id='add_vac'>
+    <form action="javascript:send_json_to_server('form_vac')" method="post" id="form_vac" name="form_vac">
+      <button class="close_btn" type="button" onclick="close_form('add_vac')">X</button>
+      <div class="mb-3"> 
+        {% csrf_token %}
+        <p><label for="id_category">Категория:</label></p>
+        <select name='id_category' class="form-select">
+          {% for cat in tb_category %} 
+          <option value='{{ cat.id }}' >{{ cat.name_category }}</option>
+          {% endfor%}
+        </select>
+        <p><label for="name_add_vacancy">Новая должность:</label></p>
+        <input type="text" name="name_add_vacancy" class="form-control" maxlength="200" required id="name_add_vacancy" />
+        <br>
+        <button type="submit" class="btn btn-primary" name="button-vac_all" access="false" style="success" id="button-vac_all">Добавить должность</button>
+    </div>
+    </form>
+  </div>
+  
+
+  <div class='add_worker' id='add_worker'>
+    <form action="javascript:send_json_to_server('form_worker')" method="post" id="form_worker" name="form_worker">
+      <button class="close_btn" type="button" onclick="close_form('add_worker')">X</button>
+      <div class="mb-3">
+      {% csrf_token %}
+      <p><label for="id_vacancy">Должность:</label></p>
+      <select name='id_vacancy' class="form-select">
+        {% for vac in all_vacancy %}
+          <option value='{{ vac.id }}'>{{ vac.name_vacancy }}</option>
+        {% endfor%}
+      </select> 
+      <p>
+      {{form_work.as_p}}
+
+      <button type="submit" class="btn btn-primary" name="button-cat" access="false" style="success" id="button-cat">Добавить сотрудника</button>
+      </div>
+    </form>
+  </div>
+
+<br>
+
+  <div class="btn-group btn-group-toggle" data-toggle="buttons">
+    <label for="r_workers" class="btn btn-secondary active">
+      <input type="radio" name="tb_view" value="r_workers" id="r_workers" onchange="tb_display('r_workers')" checked>
+      Сотрудники
+    </label>
+
+    <label for="r_vacancy" class="btn btn-secondary">
+      <input type="radio" name="tb_view" value="r_vacancy" id="r_vacancy" onchange="tb_display('r_vacancy')">
+      Должности
+    </label>
+    
+    <label for="r_category" class="btn btn-secondary">
+      <input type="radio" name="tb_view" value="r_category" id="r_category" onchange="tb_display('r_category')">   
+      Категории
+    </label>
+  </div>
+
+
+  <div class="tb_workers">
+    <table class="table" id="table_workers">
+      <thead>
+      <tr>
+          <th class="header" scope="col">ФИО</th>
+          <th class="header" scope="col">Пол</th>
+          <th class="header" scope="col">Возраст</th>
+          <th class="header" scope="col">Должность</th>
+          <th class="header" scope="col">Категория</th>
+          <th class="header" scope="col">Изменить</th>
+          <th class="header" scope="col">Удалить</th>
+      </tr>
+    </thead>
+
+    {% for worker in tb_workers %}
+      <tr class="table-primary"> 
+      
+          <td>{{ worker.fio }}</td>
+          <td>{{ worker.gen }}</td>
+          <td>{{ worker.age }}</td>
+          <td>{{ worker.vac }}</td>
+          <td>{{ worker.cat }}</td>
+
+          <td>
+            <button type="button" name="btn-edit" id="edit_{{worker.id}}" onclick=save(this) class="btn btn-success">
+            Изменить</button>
+          </td>
+          <td>
+            <button type="button" name="btn-del" id="del_{{worker.id}}" class="btn btn-danger">
+            Удалить</button>
+          </td> 
+        </span>    
+      </tr>
+      {% endfor %}
+
+    </table>
+  </div>
+
+  <div class="table_vacancy">
+    <table class="table table-striped" id="table_vacancy" >
+      <thead >
+      <tr>
+          <th>Номер</th>
+          <th>Должность</th>
+          <th>Категория</th>
+          <th>Изменить</th>
+          <th>Удалить</th>
+      </tr>
+    </thead>
+
+    {% for vacancy in tb_vacancy %}
+      <tr class="table-primary"> 
+      
+          <td>{{ vacancy.id }}</td>
+          <td>{{ vacancy.name_vacancy }}</td>
+          <td>{{ vacancy.category_vacancy }}</td>
+          <td>
+            <button type="button" name="btn-edit" id="edit_{{vacancy.id}}" onclick=save(this) class="btn btn-success">
+            Изменить</button>
+          </td>
+          <td>
+            <button type="button" name="btn-del" id="del_{{vacancy.id}}" class="btn btn-danger">
+            Удалить</button>
+          </td> 
+        </span>    
+      </tr>
+
+      {% endfor %}
+
+    </table>
+  </div>
+
+  <div class="table_category">
+    <table class="table table-striped" id="table_category">
+      <thead class="thead-primary">
+      <tr>
+          <th>Номер</th>
+          <th>Категория</th>
+          <th>Должностей</th> 
+          <th>Изменить</th>
+          <th>Удалить</th>
+      </tr>
+    </thead>
+
+    {% for category in tb_category %}
+      <tr class="table-primary" id="tb_cat_{{category.id}}"> 
+          {% csrf_token %}
+          <td id='{{ category.id }}'>{{ category.id }}</td>
+          <td>{{ category.name_category }}</td>
+          <td>{{ category.total_vacancy }}</td>
+          <td>
+            <button type="button" name="btn-edit" id="edit_{{category.id}}" onclick=save(this) class="btn btn-success">
+            Изменить</button>
+          </td>
+          <td>
+            <button type="button" name="btn-del" id="del_{{category.id}}" class="btn btn-danger" onclick="del_cat({{category.id}})">
+            Удалить</button>
+          </td> 
+        </span>    
+      </tr>
+    {% endfor %}
+    </table>
+  </div>
+
+{% endblock %}
+</body>
+
+</html>

@@ -1,0 +1,27 @@
+body { background: linear-gradient(#003274,  #025EA1,  #6CACE4); 
+    background-size: 100%;  background-attachment: fixed;
+    padding-left: 5%;
+    width: 95%;
+} 
+
+p { color: aliceblue; }
+
+label { font-weight: 600; font-size: 18px }
+
+.add_cat, .add_vac, .add_worker {
+    display: none;
+    width: 30%;
+
+}
+
+
+
+table { font-size: 16px; font-weight: 500; }
+th { color: white; font-weight: 800; font-size: 18px}
+
+
+.close_btn { position: absolute; left: 31%; 
+    background-color: white; color: black;}
+
+#table_vacancy { display: none; }
+#table_category { display: none; }
