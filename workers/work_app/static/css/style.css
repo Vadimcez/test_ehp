@@ -23,3 +23,5 @@ th { color: white; font-weight: 800; font-size: 18px}
 #table_vacancy { display: none; }
 #table_category { display: none; }
 #table_human { display: none; }
+
+#edit_form_vacancy, #edit_form_category { display: none; }

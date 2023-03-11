@@ -111,6 +111,14 @@ class Vacancy(models.Model):
         except Exception as e: 
             print(e)
         
+    def update(self, id, vac_name, cat_id):
+        try:
+            with connection.cursor() as cursor:
+                sql_upd_vac = "UPDATE vacancy SET name_vacancy= '%s', category_vacancy_id = %s WHERE vacancy.id = %s" % (vac_name, cat_id, id)
+                cursor.execute(sql_upd_vac)
+                print(sql_upd_vac)
+        except Exception as e:
+            print(e)
     
     def __str__(self):
         return self.name_vacancy

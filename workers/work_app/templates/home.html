@@ -16,6 +16,37 @@
 <body>
 {% block content %}
 
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <div class="container-fluid">
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="#" onclick="tb_display('r_worker')">
+            Сотрудники
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#" aria-current="page" onclick="tb_display('r_human')">
+            Физ. лица
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#" onclick="tb_display('r_vacancy')">
+            Должности
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#" onclick="tb_display('r_category')">
+          Категория
+        </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
 
 
 <div class="btn-group btn-group-toggle" data-toggle="buttons" id='radio_1'>
@@ -124,32 +155,77 @@
     </form>
   </div>
 
+
+
+
+
+
+
+  <div class="edit_cat" id='edit_cat'>
+    
+    <form action="javascript:update('edit_cat')" id='edit_form_category' method="post">
+      <button class="close_btn" type="button" onclick="">X</button>
+      <div class="mb-3">
+      {% csrf_token %}
+      <input type="hidden" id="cat_id_db_row" value="">
+      {% comment %} cat_id_db_row Переменная для сохранения category.id из БД {% endcomment %}
+      <p><label for="name_edit_category">Изменить название категории </label></p>
+      <input type="text" name="name_edit_category" class="form-control" maxlength="200" id="name_edit_category" />     
+      
+      <button type="submit" class="btn btn-primary" name="button-cat" access="false" style="success" id="button-cat">Изменить категорию</button>
+      </div>
+    </form>
+  </div>
+
+
+  <div class="edit_vac" id='edit_vac'>
+    
+    <form action="javascript:update('edit_vac')" id='edit_form_vacancy' method="post">
+      <button class="close_btn" type="button" onclick="">X</button>
+      <div class="mb-3">
+      {% csrf_token %}
+      <input type="hidden" id="vac_id_db_row" value=""> 
+      {% comment %} vac_id_db_row- Переменная для сохранения должности vacancy.id из БД {% endcomment %}
+      <p><label for="id_edit_category">Изменить категорию должности</label></p>
+      <select name='id_edit_category' id='select_edit_category' class="form-select">
+        {% for cat in tb_category %} 
+        <option value='{{ cat.id }}'>{{ cat.name_category }}</option>
+        {% endfor%}
+      </select>
+      <p><label for="name_edit_vacancy">Изменить название должности </label></p>
+      <input type="text" name="name_edit_vacancy" class="form-control" maxlength="200" id="name_edit_vacancy" />     
+      <button type="submit" class="btn btn-primary" name="button-vac" access="false" style="success" id="button-vac">Изменить должность</button>
+      </div>
+    </form>
+  </div>
+
+  <div class="edit_human" id='edit_human'>
+    
+    <form id='edit_form_human' action="javascript:update('edit_human')" method="post">
+      <button class="close_btn" type="button" onclick="">X</button>
+      <div class="mb-3">
+      {% csrf_token %}
+      <input type="hidden" id="human_id_db_row" value=""> 
+      {% comment %} vac_id_db_row- Переменная для сохранения физ лица human.id из БД {% endcomment %}
+
+      {% for human in form_human %}
+      <p>{{ human.label_tag }}</p>
+      <p>{{ human }} </p>
+      {% endfor%}
+      
+      <button type="submit" class="btn btn-primary" name="button-vac" access="false" style="success" id="button-vac">Изменить физ. лицо</button>
+      </div>
+    </form>
+  </div>
+
+
+
+
+
+
+
 <br>
 
-
-  <div class="btn-group btn-group-toggle" data-toggle="buttons">
-
-    <label for="r_worker" class="btn btn-secondary">
-      <input type="radio" name="tb_view" value="r_worker" id="r_worker" onchange="tb_display('r_worker')" checked>   
-      Сотрудники
-    </label>
-
-    <label for="r_human" class="btn btn-secondary active">
-      <input type="radio" name="tb_view" value="r_human" id="r_human" onchange="tb_display('r_human')">
-      Физ. лица
-    </label>
-
-    <label for="r_vacancy" class="btn btn-secondary">
-      <input type="radio" name="tb_view" value="r_vacancy" id="r_vacancy" onchange="tb_display('r_vacancy')">
-      Должности
-    </label>
-    
-    <label for="r_category" class="btn btn-secondary">
-      <input type="radio" name="tb_view" value="r_category" id="r_category" onchange="tb_display('r_category')">   
-      Категории
-    </label>
-
-  </div>
 
   <div class="table_human">
     <table class="table" id="table_human">
@@ -166,12 +242,12 @@
     {% for human in tb_human %}
       <tr class="table-primary" id="tb_human_{{human.id}}"> 
         {% csrf_token %}
-          <td>{{ human.fio }}</td>
-          <td>{{ human.gen }}</td>
-          <td>{{ human.age }}</td>
+          <td><span>{{ human.fio }}</span></td>
+          <td><span>{{ human.gen }}</span></td>
+          <td><span>{{ human.age }}</span></td>
 
           <td>
-            <button type="button" name="btn-edit" id="edit_{{human.id}}" onclick=save(this) class="btn btn-success">
+            <button type="button" name="btn-edit" id="edit_{{human.id}}" onclick=edit("human","tb_human_{{human.id}}",{{human.id}}) class="btn btn-success">
             Изменить</button>
           </td>
           <td>
@@ -201,12 +277,12 @@
     {% for workers in tb_workers %}
       <tr class="table-primary" id="tb_workers_{{workers.id}}"> 
         {% csrf_token %}
-          <td id='{{ workers.id }}'>{{ workers.id }}</td>
-          <td>{{ workers.fio }}</td>
+          <td id='{{ workers.id }}'><span>{{ workers.id }}</span></td>
+          <td><span>{{ workers.fio }}</span></td>
           <td>{{ workers.age }}</td>
           <td>{{ workers.gen }}</td>
-          <td>{{ workers.vac }}</td>
-          <td>{{ workers.cat }}</td>
+          <td><span>{{ workers.vac }}</span></td>
+          <td><span>{{ workers.cat }}</span></td>
           <td>
             <button type="button" name="btn-edit" id="edit_{{workers.id}}" onclick=save(this) class="btn btn-success">
             Изменить</button>
@@ -238,11 +314,11 @@
     {% for vacancy in tb_vacancy %}
       <tr class="table-primary" id="tb_vac_{{vacancy.id}}"> 
         {% csrf_token %}
-          <td id='{{ vacancy.id }}'>{{ vacancy.id }}</td>
-          <td>{{ vacancy.name_vacancy }}</td>
-          <td>{{ vacancy.category_vacancy }}</td>
+          <td id='{{ vacancy.id }}'><span>{{ vacancy.id }}</span></td>
+          <td><span>{{ vacancy.name_vacancy }}</span></td>
+          <td><span>{{ vacancy.category_vacancy }}</span></td>
           <td>
-            <button type="button" name="btn-edit" id="edit_{{vacancy.id}}" onclick=save("tb_vac_"+{{vacancy.id}},{{vacancy.id}}) class="btn btn-success">
+            <button type="button" name="btn-edit" id="edit_{{vacancy.id}}" onclick=edit("vacancy","tb_vac_{{vacancy.id}}",{{vacancy.id}}) class="btn btn-success">
             Изменить</button>
           </td>
           <td>
@@ -272,11 +348,11 @@
     {% for category in tb_category %}
       <tr class="table-primary" id="tb_cat_{{category.id}}"> 
           {% csrf_token %}
-          <td id='{{ category.id }}'>{{ category.id }}</td>
-          <td><span onclick=handle(this)>{{ category.name_category }}</span></td>
+          <td id='{{ category.id }}'><span>{{ category.id }}</span></td>
+          <td><span>{{ category.name_category }}</span></td>
           <td>{{ category.total_vacancy }}</td>
           <td>
-            <button type="button" name="btn-edit" id="edit_{{category.id}}" onclick=save("tb_cat_"+{{category.id}},{{category.id}}) class="btn btn-success">
+            <button type="button" name="btn-edit" id="edit_{{category.id}}" onclick=edit("category","tb_cat_{{category.id}}",{{category.id}}) class="btn btn-success">
             Изменить</button>
           </td>
           <td>
@@ -288,6 +364,8 @@
     {% endfor %}
     </table>
   </div>
+
+
 
 {% endblock %}
 </body>

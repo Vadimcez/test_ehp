@@ -1,4 +1,4 @@
-from django.shortcuts import render, HttpResponse
+from django.shortcuts import render
 from .forms import AddCategory, AddWorker, AddHuman
 from .services import check_is_unique, check_is_unique_human, check_is_unique_worker
 from .models import Category, Worker, Vacancy, Human
@@ -33,7 +33,7 @@ class Home(TemplateView):
     def post(self, request):
         if request.method == 'POST':
             dry = json.loads(request.body)
-            print(dry)
+            #print(dry)
             if dry.get('name_category') != None:
                 cat_name = dry.get('name_category')
                 if check_is_unique('category', 'name_category', cat_name):
@@ -75,27 +75,38 @@ class Home(TemplateView):
                     return JsonResponse(json.dumps('Vacansy exist'), safe=False)    
             
             elif dry.get('type') is not None:
-                type = dry.get('type')
-                if type == 'del_cat':
+                type_json = dry.get('type')
+                if type_json == 'del_cat':
                     id_cat = dry.get('id')
                     Category.delete(Category,id_cat)
-                elif type =='del_vac':
+                elif type_json =='del_vac':
                     id_vac = dry.get('id')
                     Vacancy.delete(Vacancy,id_vac)
-                elif type == 'del_human':
+                elif type_json == 'del_human':
                     id_worker = dry.get('id')
                     Human.delete(Human, id_worker)
-                elif type == 'del_worker':
+                elif type_json == 'del_worker':
                     id_worker = dry.get('id')
                     Worker.delete(Worker, id_worker)
-                elif type == 'upd_cat':
+                elif type_json == 'upd_cat':
                     id_cat = dry.get('id')
                     value = dry.get('value')
                     if check_is_unique('category','name_category', value):
                         Category.update(Category, id_cat, value)
                     else:
                         print ('Данная категория уже существует')
-                        return JsonResponse(json.dumps('fail upd cat'), safe=False)
+                        return JsonResponse(json.dumps('fail upd category'), safe=False)
+                elif type_json == 'upd_vac':
+                    id_vac = dry.get('id')
+                    vac_name = dry.get('vac_name')
+                    cat_id = dry.get('cat_id')
+                    if check_is_unique('vacancy','name_vacancy', vac_name):
+                        Vacancy.update(Vacancy, id_vac, vac_name, cat_id)
+                    else:
+                        print ('Данная вакансия уже существует')
+                        return JsonResponse(json.dumps('fail upd vacancy'), safe=False)
+                elif type_json == 'upd_human':
+                    print(dry)
             else:
                 print('error')
                 print(dry)
