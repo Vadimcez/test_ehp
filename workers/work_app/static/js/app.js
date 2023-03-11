@@ -83,9 +83,29 @@ function close_form() {
 
 async function send_json_to_server(form_name) {
 
-    const forma = document.getElementById(form_name);
-    const formData = new FormData(forma);
-    const data = {};
+    var forma = document.getElementById(form_name);
+    var formData = new FormData(forma);
+    var data = {};
+
+    switch(form_name) {
+      case 'form_category':
+        {data['add'] = 'add_category';        
+        break;
+        }
+      case 'form_worker':
+        {data['add'] = 'add_worker';        
+        break;
+        }
+      case 'form_vac':
+        {data['add'] = 'add_vac';       
+        break;
+        }
+      case 'form_human':
+        {data['add'] = 'add_human';       
+        break;
+        }
+    }
+
     for (let key of formData.keys()) {
       data[key] = formData.get(key);
     }
@@ -151,33 +171,26 @@ async function del_row(id, tb_name, type_data) {
   
 }
 
-function handle(object){
-  var inp = document.createElement("input");
-  inp.type = "text";
-  inp.value = object.innerText;
-
-  object.innerText = "";
-  object.appendChild(inp);
-  
-  var _event = object.onclick;
-  object.onclick = null;
-  inp.onkeydown = function(e){
-
-      if(e.keyCode === 13){
-            object.innerText = inp.value;
-            object.onclick = _event;     
-      }
-  };
-
-
-
-}
 
 function edit(type,row_id,id_db){
   var edit_type = type
   var div = document.getElementById(row_id);
   var span = div.getElementsByTagName("span");
 
+  function set_select(select, arr_index) {
+    const cat_obj = {}
+    for (i = 0; i < select.length; i++) { 
+      // data.push(select.options[i].value);
+      cat_id = select.options[i].value;
+      cat_name = select.options[i].text;
+      cat_obj[i] = {cat_id: cat_id, cat_name: cat_name}
+    }
+    for (i = 0; i < Object.keys(cat_obj).length; i++) {
+      if (cat_obj[i].cat_name === arr_index) { 
+        return id_select = cat_obj[i].cat_id
+      }  
+    }
+  }
 
     let arr = [];
   arr.push(id_db);
@@ -185,7 +198,6 @@ function edit(type,row_id,id_db){
   {   
       arr.push(span[i].innerText);
   }  
-  console.log(arr)
 
   if ( edit_type === 'category' ) {
     document.getElementById("name_edit_category").value = arr[2]
@@ -195,23 +207,11 @@ function edit(type,row_id,id_db){
   if ( edit_type === 'vacancy' ) {
     document.getElementById("vac_id_db_row").value = arr[0]
       let select = document.getElementById('select_edit_category')
-      const cat_obj = {}
-      for (i = 0; i < select.length; i++) { 
-          // data.push(select.options[i].value);
-          cat_id = select.options[i].value;
-          cat_name = select.options[i].text;
-          cat_obj[i] = {cat_id: cat_id, cat_name: cat_name}
-        }
-    //console.log(cat_obj)
 
-    for (i = 0; i < Object.keys(cat_obj).length; i++) {
-      if (cat_obj[i].cat_name === arr[3]) { 
-        var id_select = cat_obj[i].cat_id
-      }
-    }
-    document.getElementById('select_edit_category').value = id_select;
+    document.getElementById('select_edit_category').value = set_select(select, arr[3]);
     document.getElementById('name_edit_vacancy').value = arr[2];
   }
+
 
   if (edit_type === 'human') {
     console.log(arr)
@@ -227,6 +227,16 @@ function edit(type,row_id,id_db){
     }
     inputs[3].value = arr[3]
     select.value = arr[2]
+  }
+
+  if (edit_type === 'worker' ){
+    var div = document.getElementById('edit_worker');
+    let selects = div.querySelectorAll('select')
+
+    document.getElementById("worker_id_db_row").value = arr[0]
+
+    selects[1].value = set_select(selects[1], arr[2])
+    selects[0].value = set_select(selects[0], arr[3])
   }
 
 }
@@ -255,7 +265,7 @@ if (form == 'edit_cat') {
     id: db_id,
     vac_name: arr[0],
   }
-  const jsonData = JSON.stringify(data);
+  var jsonData = JSON.stringify(data);
      //console.log(jsonData);
 }
 
@@ -305,20 +315,40 @@ if (form == 'edit_cat') {
         console.log(jsonData);
   }
 
-    const url = 'http://127.0.0.1:8000/home/';
-    
-    try {
-      const response = await fetch(url, {
-        method: 'POST', 
-        body: jsonData,
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-          'X-CSRFToken': csrf,
-        }
-      });
-      
-    } 
-    catch (error) {
-      console.error('Ошибка:', error);
+
+  if (form == 'edit_worker') {
+    let selects = div.querySelectorAll('select')
+    arr = []
+    for (let i = 0; i < selects.length; i++) {
+      arr.push(selects[i].value)
     }
+
+    let data = {
+      type: 'upd_worker',
+      id: db_id,
+      id_vacancy: arr[0],
+      id_human: arr[1],
+    }
+    var jsonData = JSON.stringify(data);
+      console.log(jsonData);
+
+  }
+
+  const url = 'http://127.0.0.1:8000/home/';
+    
+  try {
+    const response = await fetch(url, {
+      method: 'POST', 
+      body: jsonData,
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'X-CSRFToken': csrf,
+      }
+    });
+    
+  } 
+  catch (error) {
+    console.error('Ошибка:', error);
+  }
+
 }

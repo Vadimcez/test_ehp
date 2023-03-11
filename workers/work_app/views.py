@@ -33,46 +33,49 @@ class Home(TemplateView):
     def post(self, request):
         if request.method == 'POST':
             dry = json.loads(request.body)
-            #print(dry)
-            if dry.get('name_category') != None:
-                cat_name = dry.get('name_category')
-                if check_is_unique('category', 'name_category', cat_name):
-                    Category.add(Category, cat_name)
-                else:
-                    print('Данная категория уже существует')
-                    return JsonResponse(json.dumps('Category exist'), safe=False)
-            elif dry.get('id_category') != None:
-                id_category = dry.get('id_category')
-                vac_name = dry.get('name_add_vacancy')
-                if check_is_unique('vacancy', 'name_vacancy', vac_name):
-                    Vacancy.add(Vacancy, vac_name, id_category)
-                else:
-                    print('Данная вакансия уже существует')
-                    return JsonResponse(json.dumps('Vacansy exist'), safe=False)            
-            elif dry.get('last_name') != None:
-                last_name = dry.get('last_name')
-                first_name = dry.get('first_name')
-                middle_name = dry.get('middle_name')
-                date_birth = dry.get('date_birth')
-                gen = dry.get('gender')
-                tb_human_upd = Human.all(Worker)
-                tb_upd = json.dumps(tb_human_upd, ensure_ascii=False)
-                if check_is_unique_human(last_name, first_name, middle_name,gen,date_birth):
-                    Human.add(Human, last_name, first_name, middle_name, gen, date_birth, )
+            print(dry)
+                        
+            if dry.get('add') is not None:
+                add_json = dry.get('add') 
+                if add_json == 'add_category':
+                    cat_name = dry.get('name_category')
+                    if check_is_unique('category', 'name_category', cat_name):
+                        Category.add(Category, cat_name)
+                    else:
+                        print('Данная категория уже существует')
+                        return JsonResponse(json.dumps('Category exist'), safe=False)
+                elif add_json == ('add_vac'):
+                    id_category = dry.get('id_category')
+                    vac_name = dry.get('name_add_vacancy')
+                    if check_is_unique('vacancy', 'name_vacancy', vac_name):
+                        Vacancy.add(Vacancy, vac_name, id_category)
+                    else:
+                        print('Данная вакансия уже существует')
+                        return JsonResponse(json.dumps('Vacansy exist'), safe=False)            
+                elif add_json == 'add_human':
+                    last_name = dry.get('last_name')
+                    first_name = dry.get('first_name')
+                    middle_name = dry.get('middle_name')
+                    date_birth = dry.get('date_birth')
+                    gen = dry.get('gender')
                     tb_human_upd = Human.all(Worker)
-                    return JsonResponse({'tb_upd':tb_upd}, json_dumps_params={'ensure_ascii': False}, safe=False)
-                else:
-                    error_add_worker = 'Физ лицо с таким ФИО и датой рождения уже существует'
-                    print(error_add_worker)
-                    return JsonResponse(json.dumps('Human exist'), safe=False)
-            elif dry.get('id_human') != None:
-                id_vacancy = dry.get('id_vacancy')
-                id_human = dry.get('id_human')
-                if check_is_unique_worker(id_human, id_vacancy):
-                    Worker.add(Worker, id_human, id_vacancy)
-                else:
-                    print('Данный сотрудник с такой вакансией уже существует')
-                    return JsonResponse(json.dumps('Vacansy exist'), safe=False)    
+                    tb_upd = json.dumps(tb_human_upd, ensure_ascii=False)
+                    if check_is_unique_human(last_name, first_name, middle_name,gen,date_birth):
+                        Human.add(Human, last_name, first_name, middle_name, gen, date_birth, )
+                        tb_human_upd = Human.all(Worker)
+                        return JsonResponse({'tb_upd':tb_upd}, json_dumps_params={'ensure_ascii': False}, safe=False)
+                    else:
+                        error_add_worker = 'Физ лицо с таким ФИО и датой рождения уже существует'
+                        print(error_add_worker)
+                        return JsonResponse(json.dumps('Human exist'), safe=False)
+                elif add_json == 'add_worker':
+                    id_vacancy = dry.get('id_vacancy')
+                    id_human = dry.get('id_human')
+                    if check_is_unique_worker(id_human, id_vacancy):
+                        Worker.add(Worker, id_human, id_vacancy)
+                    else:
+                        print('Данный сотрудник с такой вакансией уже существует')
+                        return JsonResponse(json.dumps('Vacansy exist'), safe=False)    
             
             elif dry.get('type') is not None:
                 type_json = dry.get('type')
@@ -106,7 +109,23 @@ class Home(TemplateView):
                         print ('Данная вакансия уже существует')
                         return JsonResponse(json.dumps('fail upd vacancy'), safe=False)
                 elif type_json == 'upd_human':
-                    print(dry)
+                    id = dry.get('id')
+                    last_name = dry.get('last_name')
+                    first_name = dry.get('first_name')
+                    middle_name = dry.get('middle_name')
+                    date_birth = dry.get('date_birth')
+                    gender = dry.get('gender')
+                    if check_is_unique_human(last_name, first_name, middle_name, gender, date_birth):  
+                        Human.update(Human, id, last_name, first_name, middle_name, gender, date_birth)
+                    else:
+                        print ('Данный человек уже существует')
+                        return JsonResponse(json.dumps('fail upd human'), safe=False)
+                elif type_json == 'upd_worker':
+                    id_db = dry.get('id')
+                    id_human = dry.get('id_human')
+                    id_vacancy = dry.get('id_vacancy')
+                    Worker.update(Worker, id_db, id_vacancy, id_human)
+                    
             else:
                 print('error')
                 print(dry)

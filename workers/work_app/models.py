@@ -164,7 +164,17 @@ class Human(models.Model):
                 print(sql_del_human)
         except Exception as e: 
             print(e)
-
+            
+    def update(self, id, last_name, first_name, middle_name, gender, date_birth):
+        try:
+            with connection.cursor() as cursor:
+                sql_upd_human = "UPDATE public.human SET last_name='%s', first_name='%s', middle_name='%s', gender='%s', date_birth='%s' WHERE id = %s " % (last_name, first_name, middle_name, gender, date_birth, id)
+                cursor.execute(sql_upd_human)
+            print(sql_upd_human)
+        except Exception as e:
+            print(e)
+            
+               
 class Worker(models.Model):
     class Meta:
         db_table = 'worker'
@@ -178,8 +188,8 @@ class Worker(models.Model):
             sql_add_worker = sql.SQL("INSERT INTO worker (human_id, vacancy_id) VALUES  \
                 ('%s', '%s')" % (id_human, id_vacancy))
             cursor.execute(sql_add_worker)
-            print('Add Worker')
-            print(sql_add_worker)
+        print('Add Worker')
+        print(sql_add_worker)
     
     def all(self):
         """return all values workers from database"""
@@ -206,7 +216,16 @@ class Worker(models.Model):
                 print(sql_del_worker)
         except Exception as e: 
             print(e)
-    
+           
+    def update(self, id:int, vacancy_id:int, human_id:int):
+        try:
+            with connection.cursor() as cursor:
+                sql_upd_worker = "UPDATE worker SET vacancy_id = %s, human_id = %s WHERE worker.id = %s" % ( vacancy_id, human_id, id )
+                cursor.execute(sql_upd_worker)
+            print(sql_upd_worker)
+        except Exception as e:
+            print(e)
+        
     def __str__(self):
         return f"{self.first_name} {self.last_name}"
             
