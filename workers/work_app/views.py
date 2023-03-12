@@ -9,13 +9,8 @@ from django.http import JsonResponse
 
 # Create your views here.
 
-def index(request):
-
-    return render(request, 'index.html',)
-
-
 class Home(TemplateView):
-    template_name = 'home.html'
+    template_name = 'index.html'
 
     def get(self, request):
         form_cat = AddCategory()

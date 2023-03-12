@@ -8,20 +8,36 @@ p { color: aliceblue; }
 
 label { font-weight: 600; font-size: 18px }
 
-.add_cat, .add_vac, .add_worker, .add_human {
-    display: none;
-    width: 30%;
-
-}
 
 table { font-size: 16px; font-weight: 500; }
 th { color: white; font-weight: 800; font-size: 18px}
 
-.close_btn { position: absolute; left: 31%; 
+.close_btn { position: relative; 
     background-color: white; color: black;}
 
-#table_vacancy { display: none; }
-#table_category { display: none; }
-#table_human { display: none; }
+.table_vacancy, .table_category, .table_worker, .table_human table{ 
+    width: 100%;
+    background-color: rgb(88, 88, 88);
+}
 
-/* #edit_form_vacancy, #edit_form_category, #edit_form_human { display: none; } */
+.add_edit_div {  
+display: flex;
+}
+
+.add_edit_div  div:nth-child(-n+4) {
+    width: 50%;  
+ }
+
+ .add_edit_div  div:nth-child(+n+5) { 
+    width: 50%;
+ }
+
+.add_cat, .add_vac, .add_worker, .add_human {
+    display: none;  
+    } 
+
+ #edit_vac, #edit_cat, #edit_human, #edit_worker { 
+    display: none;
+ }
+
+.container-fluid { font-size: 18px; font-weight: 600; }
