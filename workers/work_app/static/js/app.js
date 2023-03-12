@@ -3,6 +3,7 @@ var arr_form = ['add_cat', 'add_vac','add_human','add_worker'] // порядок
 var check_box = ['f_workers','f_vacancy','f_category','f_human']
 var edit_form = ['edit_cat','edit_vac','edit_human', 'edit_worker' ]
 
+var url = 'http://127.0.0.1:8000/';
 
 function tb_display(table_name) {
   
@@ -12,10 +13,13 @@ function tb_display(table_name) {
       if (table_name === 'r_human') {   
         document.getElementById('table_human').style.display = 'table'; }
       if (table_name === 'r_vacancy') {
+        console.log(table_name)
         document.getElementById('table_vacancy').style.display = 'table'; }
       if (table_name === 'r_category') {   
+        console.log(table_name)
         document.getElementById('table_category').style.display = 'table'; }
       if (table_name === 'r_worker') {
+        console.log(table_name)
         document.getElementById('table_worker').style.display = 'table'; }
 } 
 function form_display(form_name) {
@@ -44,14 +48,10 @@ function close_form(name) {
       for (let i = 0; i < check_box.length; i++) {
         document.getElementById(check_box[i]).checked = false;}
     }
-    // for (let i = 0; i < arr_form.length; i++ ) {
-    //   document.getElementById(arr_form[i]).style.display = 'none';}
 
-
-
-    // for (let i = 0; i < edit_form.length; i++) {
-    //   document.getElementById(edit_form[i]).style.display = 'none';}
 }
+
+
 
 
 
@@ -87,9 +87,7 @@ async function send_json_to_server(form_name) {
     delete data['csrfmiddlewaretoken'];
     const jsonData = JSON.stringify(data);
     //console.log(jsonData)
-    
-      const url = 'http://127.0.0.1:8000/home/';
-      
+         
         try {
           const response = await fetch(url, {
             method: 'POST', 
@@ -105,6 +103,10 @@ async function send_json_to_server(form_name) {
           console.error('Ошибка:', error);
         }  
 }
+
+
+
+
 
 async function del_row(id, tb_name, type_data) {
   const row = document.getElementById(tb_name+id);
@@ -124,7 +126,7 @@ async function del_row(id, tb_name, type_data) {
     console.log(data);
     const jsonData = JSON.stringify(data);
       
-      const url = 'http://127.0.0.1:8000/home/';
+      
       
       try {
         const response = await fetch(url, {
@@ -303,8 +305,6 @@ if (form == 'edit_cat') {
 
   }
 
-  const url = 'http://127.0.0.1:8000/home/';
-    
   try {
     const response = await fetch(url, {
       method: 'POST', 

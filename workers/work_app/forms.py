@@ -18,10 +18,7 @@ class AddHuman(forms.Form):
     male = "муж"; female = "жен"
     gen = [(male,'муж'),(female, 'жен')] 
     gender = forms.ChoiceField(choices=gen, label='Пол', widget=forms.Select(attrs={'class': 'form-select'}))
-    
-    #rows_vac = Vacancy.all(Vacancy)
-    #vac = forms.ChoiceField(choices=rows_vac, label='Вакансии')    
-
+     
 class AddWorker(forms.Form):
     rows_human = Human.all(Human)
     id_human = forms.ChoiceField(choices=rows_human, label='Физ. лицо')

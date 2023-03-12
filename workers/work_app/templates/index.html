@@ -96,12 +96,6 @@
       <button class="close_btn" type="button" onclick="close_form('add_human')">X</button>
       <div class="mb-3">
       {% csrf_token %}
-      <p><label for="id_vacancy">Должность:</label></p>
-      <select name='id_vacancy' class="form-select">
-        {% for vac in all_vacancy %}
-          <option value='{{ vac.id }}'>{{ vac.name_vacancy }}</option>
-        {% endfor%}
-      </select> 
       {% for human in form_human %}
         <p>{{ human.label_tag }}</p>
         <p>{{ human }} </p>
@@ -263,6 +257,7 @@
     <table class="table" id="table_human">
       <thead>
       <tr>
+          <th class="header" scope="col">Номер</th>
           <th class="header" scope="col">ФИО</th>
           <th class="header" scope="col">Пол</th>
           <th class="header" scope="col">Дата рождения</th>
@@ -272,6 +267,7 @@
     {% for human in tb_human %}
       <tr class="table-primary" id="tb_human_{{human.id}}"> 
         {% csrf_token %}
+          <td> {{human.id}} </td>
           <td><span>{{ human.fio }}</span></td>
           <td><span>{{ human.gen }}</span></td>
           <td><span>{{ human.age }}</span></td>

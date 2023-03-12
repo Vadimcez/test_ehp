@@ -12,12 +12,18 @@ label { font-weight: 600; font-size: 18px }
 table { font-size: 16px; font-weight: 500; }
 th { color: white; font-weight: 800; font-size: 18px}
 
+a { font-size: 20px; }
+
 .close_btn { position: relative; 
     background-color: white; color: black;}
 
-.table_vacancy, .table_category, .table_worker, .table_human table{ 
+.table_vacancy, .table_category, .table_worker, .table_human { 
     width: 100%;
     background-color: rgb(88, 88, 88);
+}
+
+#table_vacancy, #table_category, #table_human { 
+    display: none;
 }
 
 .add_edit_div {  
