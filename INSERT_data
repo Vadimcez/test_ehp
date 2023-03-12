@@ -1,0 +1,272 @@
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 11.19
+-- Dumped by pg_dump version 11.19
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET xmloption = content;
+SET client_min_messages = warning;
+SET row_security = off;
+
+--
+-- Data for Name: auth_group; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+
+
+--
+-- Data for Name: django_content_type; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+INSERT INTO public.django_content_type (id, app_label, model) VALUES (1, 'admin', 'logentry');
+INSERT INTO public.django_content_type (id, app_label, model) VALUES (2, 'auth', 'permission');
+INSERT INTO public.django_content_type (id, app_label, model) VALUES (3, 'auth', 'group');
+INSERT INTO public.django_content_type (id, app_label, model) VALUES (4, 'auth', 'user');
+INSERT INTO public.django_content_type (id, app_label, model) VALUES (5, 'contenttypes', 'contenttype');
+INSERT INTO public.django_content_type (id, app_label, model) VALUES (6, 'sessions', 'session');
+INSERT INTO public.django_content_type (id, app_label, model) VALUES (7, 'work_app', 'category');
+INSERT INTO public.django_content_type (id, app_label, model) VALUES (8, 'work_app', 'vacancy');
+INSERT INTO public.django_content_type (id, app_label, model) VALUES (9, 'work_app', 'worker');
+INSERT INTO public.django_content_type (id, app_label, model) VALUES (10, 'work_app', 'human');
+
+
+--
+-- Data for Name: auth_permission; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+INSERT INTO public.auth_permission (id, name, content_type_id, codename) VALUES (1, 'Can add log entry', 1, 'add_logentry');
+INSERT INTO public.auth_permission (id, name, content_type_id, codename) VALUES (2, 'Can change log entry', 1, 'change_logentry');
+INSERT INTO public.auth_permission (id, name, content_type_id, codename) VALUES (3, 'Can delete log entry', 1, 'delete_logentry');
+INSERT INTO public.auth_permission (id, name, content_type_id, codename) VALUES (4, 'Can add permission', 2, 'add_permission');
+INSERT INTO public.auth_permission (id, name, content_type_id, codename) VALUES (5, 'Can change permission', 2, 'change_permission');
+INSERT INTO public.auth_permission (id, name, content_type_id, codename) VALUES (6, 'Can delete permission', 2, 'delete_permission');
+INSERT INTO public.auth_permission (id, name, content_type_id, codename) VALUES (7, 'Can add group', 3, 'add_group');
+INSERT INTO public.auth_permission (id, name, content_type_id, codename) VALUES (8, 'Can change group', 3, 'change_group');
+INSERT INTO public.auth_permission (id, name, content_type_id, codename) VALUES (9, 'Can delete group', 3, 'delete_group');
+INSERT INTO public.auth_permission (id, name, content_type_id, codename) VALUES (10, 'Can add user', 4, 'add_user');
+INSERT INTO public.auth_permission (id, name, content_type_id, codename) VALUES (11, 'Can change user', 4, 'change_user');
+INSERT INTO public.auth_permission (id, name, content_type_id, codename) VALUES (12, 'Can delete user', 4, 'delete_user');
+INSERT INTO public.auth_permission (id, name, content_type_id, codename) VALUES (13, 'Can add content type', 5, 'add_contenttype');
+INSERT INTO public.auth_permission (id, name, content_type_id, codename) VALUES (14, 'Can change content type', 5, 'change_contenttype');
+INSERT INTO public.auth_permission (id, name, content_type_id, codename) VALUES (15, 'Can delete content type', 5, 'delete_contenttype');
+INSERT INTO public.auth_permission (id, name, content_type_id, codename) VALUES (16, 'Can add session', 6, 'add_session');
+INSERT INTO public.auth_permission (id, name, content_type_id, codename) VALUES (17, 'Can change session', 6, 'change_session');
+INSERT INTO public.auth_permission (id, name, content_type_id, codename) VALUES (18, 'Can delete session', 6, 'delete_session');
+INSERT INTO public.auth_permission (id, name, content_type_id, codename) VALUES (19, 'Can add category', 7, 'add_category');
+INSERT INTO public.auth_permission (id, name, content_type_id, codename) VALUES (20, 'Can change category', 7, 'change_category');
+INSERT INTO public.auth_permission (id, name, content_type_id, codename) VALUES (21, 'Can delete category', 7, 'delete_category');
+INSERT INTO public.auth_permission (id, name, content_type_id, codename) VALUES (22, 'Can add vacancy', 8, 'add_vacancy');
+INSERT INTO public.auth_permission (id, name, content_type_id, codename) VALUES (23, 'Can change vacancy', 8, 'change_vacancy');
+INSERT INTO public.auth_permission (id, name, content_type_id, codename) VALUES (24, 'Can delete vacancy', 8, 'delete_vacancy');
+INSERT INTO public.auth_permission (id, name, content_type_id, codename) VALUES (25, 'Can add worker', 9, 'add_worker');
+INSERT INTO public.auth_permission (id, name, content_type_id, codename) VALUES (26, 'Can change worker', 9, 'change_worker');
+INSERT INTO public.auth_permission (id, name, content_type_id, codename) VALUES (27, 'Can delete worker', 9, 'delete_worker');
+INSERT INTO public.auth_permission (id, name, content_type_id, codename) VALUES (28, 'Can add human', 10, 'add_human');
+INSERT INTO public.auth_permission (id, name, content_type_id, codename) VALUES (29, 'Can change human', 10, 'change_human');
+INSERT INTO public.auth_permission (id, name, content_type_id, codename) VALUES (30, 'Can delete human', 10, 'delete_human');
+
+
+--
+-- Data for Name: auth_group_permissions; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+
+
+--
+-- Data for Name: auth_user; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+INSERT INTO public.auth_user (id, password, last_login, is_superuser, username, first_name, last_name, email, is_staff, is_active, date_joined) VALUES (1, 'pbkdf2_sha256$36000$rZms48DxSRzU$tGu2s9gRmxB/5q0/reWjApkva6Kiu+IOfZSh7s4camI=', NULL, true, 'admin', '', '', 'admin@admin.com', true, true, '2023-03-04 16:45:32.557819+05');
+
+
+--
+-- Data for Name: auth_user_groups; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+
+
+--
+-- Data for Name: auth_user_user_permissions; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+
+
+--
+-- Data for Name: category; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+INSERT INTO public.category (id, name_category) VALUES (1, 'Руководитель');
+INSERT INTO public.category (id, name_category) VALUES (2, 'Специалист');
+INSERT INTO public.category (id, name_category) VALUES (3, 'Служащий');
+INSERT INTO public.category (id, name_category) VALUES (4, 'Рабочий');
+INSERT INTO public.category (id, name_category) VALUES (12, 'Разнораб');
+
+
+--
+-- Data for Name: django_admin_log; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+
+
+--
+-- Data for Name: django_migrations; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+INSERT INTO public.django_migrations (id, app, name, applied) VALUES (1, 'contenttypes', '0001_initial', '2023-03-01 23:29:06.313986+05');
+INSERT INTO public.django_migrations (id, app, name, applied) VALUES (2, 'auth', '0001_initial', '2023-03-01 23:29:06.372986+05');
+INSERT INTO public.django_migrations (id, app, name, applied) VALUES (3, 'admin', '0001_initial', '2023-03-01 23:29:06.390989+05');
+INSERT INTO public.django_migrations (id, app, name, applied) VALUES (4, 'admin', '0002_logentry_remove_auto_add', '2023-03-01 23:29:06.395987+05');
+INSERT INTO public.django_migrations (id, app, name, applied) VALUES (5, 'contenttypes', '0002_remove_content_type_name', '2023-03-01 23:29:06.407987+05');
+INSERT INTO public.django_migrations (id, app, name, applied) VALUES (6, 'auth', '0002_alter_permission_name_max_length', '2023-03-01 23:29:06.411987+05');
+INSERT INTO public.django_migrations (id, app, name, applied) VALUES (7, 'auth', '0003_alter_user_email_max_length', '2023-03-01 23:29:06.421735+05');
+INSERT INTO public.django_migrations (id, app, name, applied) VALUES (8, 'auth', '0004_alter_user_username_opts', '2023-03-01 23:29:06.427745+05');
+INSERT INTO public.django_migrations (id, app, name, applied) VALUES (9, 'auth', '0005_alter_user_last_login_null', '2023-03-01 23:29:06.432744+05');
+INSERT INTO public.django_migrations (id, app, name, applied) VALUES (10, 'auth', '0006_require_contenttypes_0002', '2023-03-01 23:29:06.434745+05');
+INSERT INTO public.django_migrations (id, app, name, applied) VALUES (11, 'auth', '0007_alter_validators_add_error_messages', '2023-03-01 23:29:06.438744+05');
+INSERT INTO public.django_migrations (id, app, name, applied) VALUES (12, 'auth', '0008_alter_user_username_max_length', '2023-03-01 23:29:06.449634+05');
+INSERT INTO public.django_migrations (id, app, name, applied) VALUES (13, 'sessions', '0001_initial', '2023-03-01 23:29:06.460173+05');
+INSERT INTO public.django_migrations (id, app, name, applied) VALUES (14, 'work_app', '0001_initial', '2023-03-01 23:29:06.480449+05');
+INSERT INTO public.django_migrations (id, app, name, applied) VALUES (15, 'work_app', '0002_auto_20230301_2356', '2023-03-01 23:56:28.29236+05');
+INSERT INTO public.django_migrations (id, app, name, applied) VALUES (16, 'work_app', '0003_auto_20230302_0004', '2023-03-02 00:04:25.331915+05');
+INSERT INTO public.django_migrations (id, app, name, applied) VALUES (17, 'work_app', '0004_auto_20230302_1332', '2023-03-02 13:32:16.579412+05');
+INSERT INTO public.django_migrations (id, app, name, applied) VALUES (18, 'work_app', '0005_worker_gender', '2023-03-02 15:40:52.459508+05');
+INSERT INTO public.django_migrations (id, app, name, applied) VALUES (19, 'work_app', '0006_auto_20230302_1540', '2023-03-02 15:40:52.463476+05');
+INSERT INTO public.django_migrations (id, app, name, applied) VALUES (20, 'work_app', '0007_auto_20230309_1810', '2023-03-09 18:11:40.91011+05');
+INSERT INTO public.django_migrations (id, app, name, applied) VALUES (21, 'work_app', '0008_auto_20230309_1821', '2023-03-09 18:21:29.645967+05');
+
+
+--
+-- Data for Name: django_session; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+
+
+--
+-- Data for Name: human; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+INSERT INTO public.human (id, last_name, first_name, middle_name, gender, date_birth) VALUES (1, 'Петров', 'Петр', 'Олегович', 'муж', '1988-05-12');
+INSERT INTO public.human (id, last_name, first_name, middle_name, gender, date_birth) VALUES (7, 'Иванов', 'Петр', 'Олегович', 'муж', '1980-06-12');
+INSERT INTO public.human (id, last_name, first_name, middle_name, gender, date_birth) VALUES (2, 'Новгород', 'Ольга', 'Игоревна', 'жен', '1989-02-10');
+
+
+--
+-- Data for Name: vacancy; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+INSERT INTO public.vacancy (id, name_vacancy, category_vacancy_id) VALUES (1, 'Директор', 1);
+INSERT INTO public.vacancy (id, name_vacancy, category_vacancy_id) VALUES (2, 'Инженер', 2);
+INSERT INTO public.vacancy (id, name_vacancy, category_vacancy_id) VALUES (3, 'Уборщик помещений', 4);
+
+
+--
+-- Data for Name: worker; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+INSERT INTO public.worker (id, vacancy_id, human_id) VALUES (13, 2, 2);
+INSERT INTO public.worker (id, vacancy_id, human_id) VALUES (12, 1, 1);
+
+
+--
+-- Name: auth_group_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.auth_group_id_seq', 1, false);
+
+
+--
+-- Name: auth_group_permissions_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.auth_group_permissions_id_seq', 1, false);
+
+
+--
+-- Name: auth_permission_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.auth_permission_id_seq', 30, true);
+
+
+--
+-- Name: auth_user_groups_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.auth_user_groups_id_seq', 1, false);
+
+
+--
+-- Name: auth_user_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.auth_user_id_seq', 1, true);
+
+
+--
+-- Name: auth_user_user_permissions_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.auth_user_user_permissions_id_seq', 1, false);
+
+
+--
+-- Name: django_admin_log_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.django_admin_log_id_seq', 1, false);
+
+
+--
+-- Name: django_content_type_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.django_content_type_id_seq', 10, true);
+
+
+--
+-- Name: django_migrations_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.django_migrations_id_seq', 21, true);
+
+
+--
+-- Name: work_app_category_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.work_app_category_id_seq', 22, true);
+
+
+--
+-- Name: work_app_human_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.work_app_human_id_seq', 7, true);
+
+
+--
+-- Name: work_app_vacancy_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.work_app_vacancy_id_seq', 11, true);
+
+
+--
+-- Name: work_app_worker_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.work_app_worker_id_seq', 15, true);
+
+
+--
+-- PostgreSQL database dump complete
+--
+
