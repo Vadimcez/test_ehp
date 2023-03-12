@@ -47,6 +47,8 @@ services.py
 <br>
 и проверяет его в services.py на уникальность, далее вызвается метод изменяемой модели и изменения заносятся в БД
 
+![alt text](https://github.com/Vadimcez/test_ehp/blob/master/test2.png?raw=true)
+
 <h3>JavaScript</h3>
 <p> app.js</p>
 <p>В начале описаны функции отображения/скрытия форм/таблиц display: none / block</p>
